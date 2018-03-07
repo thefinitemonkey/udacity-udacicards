@@ -4,21 +4,18 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { StackNavigator } from "react-navigation";
 import { Constants } from "expo";
-import reducer from "./reducers";
+import store from "./store/store";
 import { green, white } from "./utils/colors";
 import CustomStatusBar from "./components/CustomStatusBar";
+import DeckList from "./components/DeckList";
 
 export default class App extends Component {
   render() {
     return (
-      <Provider store={createStore(reducer)}>
-        <View>
+      <Provider store={store()}>
+        <View style={{ flex: 1 }}>
           <CustomStatusBar backgroundColor={green} barStyle="light-content" />
-          <View>
-            <Text>Open up App.js to start working on your app!</Text>
-            <Text>Changes you make will automatically reload.</Text>
-            <Text>Shake your phone to open the developer menu.</Text>
-          </View>
+            <DeckList />
         </View>
       </Provider>
     );

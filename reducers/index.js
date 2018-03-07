@@ -27,15 +27,18 @@ const decks = (state = {}, action) => {
 
   switch (action.type) {
     case RECEIVE_GET_DECKS:
+      if (!decks) return state;
       // Update the state with the new set of decks
       return decks;
     case RECEIVE_GET_DECK:
+      if (!deck) return state;
       // Update the state by replacing a deck with the
       // returned deck
       newState = Object.assign({}, this.state);
       newState[deckId] = deck;
       return newState;
     case RECEIVE_DELETE_DECK:
+      if (!deck) return state;
       // Update the state by deleting the specified deck
       newState = {};
       keys = this.state.keys();
