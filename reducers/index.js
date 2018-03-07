@@ -1,0 +1,53 @@
+import {
+  RECEIVE_GET_DECKS,
+  RECEIVE_GET_DECK,
+  RECEIVE_DELETE_DECK
+} from "../actions";
+
+/* 
+The default state for the decks is
+{  }
+
+Populated decks looks like
+{ deckKey: 
+    {title: "deckName", 
+    questions:[
+        {question:"text", 
+        answer:"text"}
+    ], 
+    created: dateValue, 
+    modified: dateValue}
+}
+*/
+
+const decks = (state = {}, action) => {
+  const { deck, decks, deckId } = action;
+  let newState;
+  let keys;
+
+  switch (action.type) {
+    case RECEIVE_GET_DECKS:
+      // Update the state with the new set of decks
+      return decks;
+    case RECEIVE_GET_DECK:
+      // Update the state by replacing a deck with the
+      // returned deck
+      newState = Object.assign({}, this.state);
+      newState[deckId] = deck;
+      return newState;
+    case RECEIVE_DELETE_DECK:
+      // Update the state by deleting the specified deck
+      newState = {};
+      keys = this.state.keys();
+      keys.array.forEach(key => {
+        if (key !== deckId) {
+          newState[key] = this.state[key];
+        }
+      });
+      return newState;
+    default:
+      return state;
+  }
+};
+
+export default decks;
