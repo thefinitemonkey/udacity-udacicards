@@ -1,12 +1,9 @@
 import * as Api from "../utils/api";
 
-const RECEIVE_GET_DECKS = "GET_DECKS";
-const RECEIVE_GET_DECK = "GET_DECK";
-const RECEIVE_DELETE_DECK = "DELETE_DECK";
-
-export const getDecks = () => dispatch => {
-  Api.getDecks().then(decks => dispatch(receiveGetDecks(decks)));
-};
+export const RECEIVE_GET_DECKS = "RECEIVE_GET_DECKS";
+export const RECEIVE_GET_DECK = "RECEIVE_GET_DECK";
+export const RECEIVE_DELETE_DECK = "RECEIVE_DELETE_DECK";
+export const RECEIVE_REMOVE_ALL = "RECEIVE_REMOVE_ALL";
 
 export function receiveGetDecks(decks) {
   return {
@@ -28,6 +25,14 @@ export function receiveDeleteDeck(deckId) {
     deckId
   };
 }
+
+export const removeAll = () => dispatch => {
+  Api.removeAll().then(() => dispatch(receiveRemoveAll()));
+}
+
+export const getDecks = () => dispatch => {
+  Api.getDecks().then(decks => dispatch(receiveGetDecks(decks)));
+};
 
 export const getDeck = deckId => dispatch => {
   Api.getDeck(deckId).then(deck => dispatch(receiveGetDeck(deck)));

@@ -6,45 +6,55 @@ export const getDecks = () => {
   // Start by getting all the keys for the decks, then getting
   // the decks for all the keys
   const op = AsyncStorage.getAllKeys()
-    .then(results => {
-      console.log("results", results);
-      results.json();
-    })
     .then(keys => {
-      AsyncStorage.multiGet(keys);
+      console.log("get all keys", keys);
+      return AsyncStorage.multiGet(keys);
     })
-    .then(results => results.json())
     .then(deckArray => {
       console.log("deckArray", deckArray);
       const decks = {};
-      deckArray.forEach(deck => (decks[deck[0]] = deck[1]));
-      return deckArray;
+      deckArray.forEach(deck => {
+        decks[deck[0]] = JSON.parse(deck[1])
+      }, decks);
+      console.log("parsed decks", decks);
+      return decks;
+    })
+    .catch(e => {
+      return {};
     });
 
   return op;
 };
 
-export const getDeck = key =>
+export const getDeck = key => {
   // Return the specified deck
-  AsyncStorage.getItem(key).then((error, results) => results.json());
+  const op = AsyncStorage.getItem(key).then((error, results) => {
+    console.log("getdeck results", results);
+    return results.json();
+  });
+
+  return op;
+};
 
 export const createDeck = title => {
   // Create a new deck with the given title and a unique key
   const key = `${UDACI_CARDS_APPLICATION_KEY}:${getUUID()}`;
   const newDate = Date.now();
+  console.log("create new deck (key): ", key);
+  console.log("create new deck (title): ", title);
   const op = AsyncStorage.setItem(
     key,
-    `{title:${title}, questions:[], created:${newDate}, modified:${newDate}`
+    `{title:${title}, questions:[], created:${newDate}, modified:${newDate}}`
   )
     .then(() => {
-      return {
-        key: {
-          title: title,
-          questions: [],
-          created: newDate,
-          modified: newDate
-        }
+      const newDeck = {};
+      newDeck[key] = {
+        title: title,
+        questions: [],
+        created: newDate,
+        modified: newDate
       };
+      return newDeck;
     })
     .catch(error => {
       console.warn("error saving new deck: ", error);
@@ -154,3 +164,18 @@ export const deleteCard = (deckId, card) => {
 
   return op;
 };
+
+export const removeAll = () => {
+  const op = AsyncStorage.getAllKeys()
+    .then(keys => {
+      return AsyncStorage.multiRemove(keys);
+    })
+    .then(result => {console.log("All removed")
+    })
+    .catch(e => {
+      console.log("Not all removed");
+    });
+
+  return op;
+
+}

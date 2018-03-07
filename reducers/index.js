@@ -23,6 +23,7 @@ Populated decks looks like
 const decks = (state = {}, action) => {
   const { deck, decks, deckId } = action;
   let newState;
+  let newDeck;
   let keys;
 
   switch (action.type) {
@@ -34,7 +35,9 @@ const decks = (state = {}, action) => {
       if (!deck) return state;
       // Update the state by replacing a deck with the
       // returned deck
-      newState = Object.assign({}, this.state);
+      newDeck = {};
+      newDeck[deckId] = deck;
+      newState = Object.assign(this.state, newDeck);
       newState[deckId] = deck;
       return newState;
     case RECEIVE_DELETE_DECK:

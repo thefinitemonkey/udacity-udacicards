@@ -8,14 +8,29 @@ import store from "./store/store";
 import { green, white } from "./utils/colors";
 import CustomStatusBar from "./components/CustomStatusBar";
 import DeckList from "./components/DeckList";
+import NewDeck from "./components/NewDeck";
 
+const MainNavigator = StackNavigator({
+  Home: {
+    screen: DeckList
+  },
+  NewDeck: {
+    screen: NewDeck,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: green
+      }
+    }
+  }
+});
 export default class App extends Component {
   render() {
     return (
       <Provider store={store()}>
         <View style={{ flex: 1 }}>
           <CustomStatusBar backgroundColor={green} barStyle="light-content" />
-            <DeckList />
+          <MainNavigator />
         </View>
       </Provider>
     );

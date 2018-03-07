@@ -4,16 +4,20 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TouchableHighlight,
   Platform
 } from "react-native";
 import { connect } from "react-redux";
-import { getDecks, getDeck, createDeck, deleteDeck } from "../actions";
+import { getDecks, getDeck, createDeck, deleteDeck, removeAll } from "../actions";
 import { green, white } from "../utils/colors";
+import NewDeck from "./NewDeck";
 
 class DeckList extends Component {
   componentDidMount = () => {
     this.props.getDecks();
+  };
+
+  handleNavigateCreateDeck = () => {
+    this.props.navigation.navigate("NewDeck");
   };
 
   render = () => {
@@ -25,7 +29,7 @@ class DeckList extends Component {
           <Text style={styles.cardCountText}>{decks.length} card decks</Text>
           <TouchableOpacity
             style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
-            onPress={this.navigateCreateDeck}
+            onPress={this.handleNavigateCreateDeck}
           >
             <Text style={styles.btnText}>Create Deck</Text>
           </TouchableOpacity>
@@ -78,15 +82,25 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps({ decks = {} }) {
+function mapStateToProps(decks) {
+  console.log("mapStateToProps state", decks);
   // Change the format from {"deckid":{...props}} to
   // [{"id":"deckid", ...props}]
+
   const decksArray = [];
   const keys = Object.keys(decks);
+  console.log("mapState keys", keys);
   keys.forEach(key => {
-    const deck = { id: key, ...decks[key] };
-    decksArray.push(deck);
+      console.log("object at key", decks[key]);
+      const newObj = {};
+      newObj["id"] = key;
+      //console.log("key props", Object.assign(decks[key], newObj));
+      const deck = decks[key];
+    const newDeck = Object.assign(deck, newObj);
+    decksArray.push(newDeck);
   });
+  console.log("decks", decks);
+  console.log("decksArray", decksArray);
   return { decks: decksArray };
 }
 
@@ -95,7 +109,8 @@ function mapDispatchToProps(dispatch) {
     getDecks: () => dispatch(getDecks()),
     getDeck: deckId => dispatch(getDeck(deckId)),
     createDeck: title => dispatch(createDeck(title)),
-    deleteDeck: deckId => dispatch(deleteDeck(deckId))
+    deleteDeck: deckId => dispatch(deleteDeck(deckId)),
+    removeAll: () => dispatch(removeAll())
   };
 }
 
