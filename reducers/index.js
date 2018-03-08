@@ -22,9 +22,6 @@ Populated decks looks like
 
 const decks = (state = {}, action) => {
   const { deck, decks, deckId } = action;
-  let newState;
-  let newDeck;
-  let keys;
 
   switch (action.type) {
     case RECEIVE_GET_DECKS:
@@ -35,18 +32,12 @@ const decks = (state = {}, action) => {
       if (!deck) return state;
       // Update the state by replacing a deck with the
       // returned deck
-      newState = Object.assign({}, state, deck);
-      return newState;
+      return {...state, ...deck};
     case RECEIVE_DELETE_DECK:
-      if (!deck) return state;
+      if (!deckId) return state;
       // Update the state by deleting the specified deck
-      newState = {};
-      keys = state.keys();
-      keys.array.forEach(key => {
-        if (key !== deckId) {
-          newState[key] = state[key];
-        }
-      });
+      let newState = {...state};
+      delete newState[deckId];
       return newState;
     default:
       return state;

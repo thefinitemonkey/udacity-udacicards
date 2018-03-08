@@ -10,6 +10,7 @@ import CustomStatusBar from "./components/CustomStatusBar";
 import DeckList from "./components/DeckList";
 import NewDeck from "./components/NewDeck";
 import DeckInfo from "./components/DeckInfo";
+import Deck from "./components/Deck";
 
 const MainNavigator = StackNavigator({
   Home: {
@@ -34,6 +35,15 @@ const MainNavigator = StackNavigator({
         backgroundColor: green
       }
     }
+  },
+  Deck: {
+    screen: Deck,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: green
+      }
+    }
   }
 });
 export default class App extends Component {
@@ -48,3 +58,4 @@ export default class App extends Component {
     );
   }
 }
+

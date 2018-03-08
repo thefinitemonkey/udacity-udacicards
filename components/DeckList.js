@@ -17,6 +17,7 @@ import {
 } from "../actions";
 import { green, white, gray } from "../utils/colors";
 import NewDeck from "./NewDeck";
+import Deck from "./Deck";
 
 class DeckList extends Component {
   componentDidMount = () => {
@@ -34,9 +35,7 @@ class DeckList extends Component {
   };
 
   handleNavigateToDeck = (deckId, deckTitle) => {
-      console.log("deckId", deckId);
-      console.log("deckTitle", deckTitle);
-    this.props.navigation.navigate("DeckInfo", { id:deckId, title:deckTitle });
+    this.props.navigation.navigate("Deck", { id:deckId, title:deckTitle });
   };
 
   renderListItem = ({ item }) => {
