@@ -31,7 +31,7 @@ export default class App extends Component {
       <Provider store={store()}>
         <View style={{ flex: 1 }}>
           <CustomStatusBar backgroundColor={green} barStyle="light-content" />
-          <MainNavigator />
+          <MainNavigator style={{flex:1}} />
         </View>
       </Provider>
     );

@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Platform
+  Platform,
+  FlatList
 } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -37,13 +38,11 @@ class DeckList extends Component {
 
     return (
       <View style={styles.column}>
-        <View style={styles.row}>
-          <View style={styles.twoColumn}>
-            <Text style={styles.cardCountText}>
-              {this.props.decks.length} card decks
-            </Text>
+        <View style={[styles.row, styles.listHeader]}>
+          <View>
+            <Text style={styles.cardCountText}>{decks.length} card decks</Text>
           </View>
-          <View style={styles.twoColumn}>
+          <View>
             <TouchableOpacity
               style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
               onPress={this.handleNavigateCreateDeck}
@@ -52,6 +51,14 @@ class DeckList extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        <View style={styles.deckList}>
+          <FlatList
+            style={styles.deckList}
+            data={decks}
+            keyExtractor={(item, index) => item.id}
+            renderItem={({ item }) => <Text>{item.title}</Text>}
+          />
+        </View>
       </View>
     );
   };
@@ -59,24 +66,28 @@ class DeckList extends Component {
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: "row",
-    flex: 1
+    flexDirection: "row"
   },
   column: {
     flexDirection: "column",
-    flex: 1,
-    alignItems: "center"
+    justifyContent: "flex-start",
+    flex: 1
+  },
+  listHeader: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 20
   },
   twoColumn: {
-    flex: 0.5,
     margin: 10
   },
   cardCountText: {
     fontSize: 20,
-    padding: 5,
-    alignSelf: "flex-start",
-    justifyContent: "center"
+    marginLeft: 10,
+    marginRight: 10
   },
+  deckList: {},
   iosBtn: {
     backgroundColor: green,
     padding: 10,
@@ -96,7 +107,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignSelf: "flex-end",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   btnText: {
     color: white,
