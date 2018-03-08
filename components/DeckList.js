@@ -33,17 +33,23 @@ class DeckList extends Component {
     this.props.navigation.navigate("NewDeck");
   };
 
-  handleNavigateToDeck = id => {};
+  handleNavigateToDeck = (deckId, deckTitle) => {
+      console.log("deckId", deckId);
+      console.log("deckTitle", deckTitle);
+    this.props.navigation.navigate("DeckInfo", { id:deckId, title:deckTitle });
+  };
 
   renderListItem = ({ item }) => {
     const date = new Date(item.modified);
     const updateDate = date.toLocaleString();
+    const id = item.id;
+    const title = item.title;
 
     return (
       <View>
         <TouchableOpacity
           style={styles.btnListItem}
-          onPress={this.handleNavigateToDeck(item.id)}
+          onPress={() => this.handleNavigateToDeck(id, title)}
         >
           <View>
             <Text style={styles.titleListItem}>{item.title}</Text>
@@ -75,7 +81,7 @@ class DeckList extends Component {
               style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
               onPress={this.handleNavigateCreateDeck}
             >
-              <Text style={styles.btnText}>Create Deck</Text>
+              <Text style={styles.btnText}>New Deck</Text>
             </TouchableOpacity>
           </View>
         </View>

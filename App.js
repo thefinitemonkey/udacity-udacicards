@@ -9,14 +9,25 @@ import { green, white } from "./utils/colors";
 import CustomStatusBar from "./components/CustomStatusBar";
 import DeckList from "./components/DeckList";
 import NewDeck from "./components/NewDeck";
+import DeckInfo from "./components/DeckInfo";
 
 const MainNavigator = StackNavigator({
   Home: {
     screen: DeckList,
-    navigationOptions: { header: null }
+    navigationOptions: { title: "Deck List", header: null }
   },
   NewDeck: {
     screen: NewDeck,
+    navigationOptions: {
+      title: "New Deck",
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: green
+      }
+    }
+  },
+  DeckInfo: {
+    screen: DeckInfo,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
@@ -31,7 +42,7 @@ export default class App extends Component {
       <Provider store={store()}>
         <View style={{ flex: 1 }}>
           <CustomStatusBar backgroundColor={green} barStyle="light-content" />
-          <MainNavigator style={{flex:1}} />
+          <MainNavigator style={{ flex: 1 }} />
         </View>
       </Provider>
     );
