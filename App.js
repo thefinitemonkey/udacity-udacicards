@@ -12,7 +12,8 @@ import NewDeck from "./components/NewDeck";
 
 const MainNavigator = StackNavigator({
   Home: {
-    screen: DeckList
+    screen: DeckList,
+    navigationOptions: { header: null }
   },
   NewDeck: {
     screen: NewDeck,

@@ -23,7 +23,7 @@ class DeckList extends Component {
   };
 
   toHome = () => {
-    this.props.navigation.goBack("DeckList");
+    this.props.navigation.goBack();
   };
 
   render = () => {

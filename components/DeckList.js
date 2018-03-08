@@ -7,7 +7,13 @@ import {
   Platform
 } from "react-native";
 import { connect } from "react-redux";
-import { getDecks, getDeck, createDeck, deleteDeck, removeAll } from "../actions";
+import {
+  getDecks,
+  getDeck,
+  createDeck,
+  deleteDeck,
+  removeAll
+} from "../actions";
 import { green, white } from "../utils/colors";
 import NewDeck from "./NewDeck";
 
@@ -17,10 +23,10 @@ class DeckList extends Component {
     //this.props.removeAll();
   };
 
-  componentWillReceiveProps = (props) => {
-      console.log("decklist new props", props);
-      this.props = props;
-  }
+  componentWillReceiveProps = props => {
+    console.log("decklist new props", props);
+    this.props = props;
+  };
 
   handleNavigateCreateDeck = () => {
     this.props.navigation.navigate("NewDeck");
@@ -30,15 +36,21 @@ class DeckList extends Component {
     const { decks } = this.props;
 
     return (
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Text style={styles.cardCountText}>{this.props.decks.length} card decks</Text>
-          <TouchableOpacity
-            style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
-            onPress={this.handleNavigateCreateDeck}
-          >
-            <Text style={styles.btnText}>Create Deck</Text>
-          </TouchableOpacity>
+      <View style={styles.column}>
+        <View style={styles.row}>
+          <View style={styles.twoColumn}>
+            <Text style={styles.cardCountText}>
+              {this.props.decks.length} card decks
+            </Text>
+          </View>
+          <View style={styles.twoColumn}>
+            <TouchableOpacity
+              style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
+              onPress={this.handleNavigateCreateDeck}
+            >
+              <Text style={styles.btnText}>Create Deck</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -52,10 +64,15 @@ const styles = StyleSheet.create({
   },
   column: {
     flexDirection: "column",
-    flex: 1
+    flex: 1,
+    alignItems: "center"
+  },
+  twoColumn: {
+    flex: 0.5,
+    margin: 10
   },
   cardCountText: {
-    fontSize: 14,
+    fontSize: 20,
     padding: 5,
     alignSelf: "flex-start",
     justifyContent: "center"
@@ -71,15 +88,15 @@ const styles = StyleSheet.create({
   androidBtn: {
     backgroundColor: green,
     padding: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
     borderRadius: 2,
     height: 45,
-    marginLeft: 20,
-    marginRight: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginLeft: 10,
+    marginRight: 10,
     alignSelf: "flex-end",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   btnText: {
     color: white,
@@ -95,9 +112,9 @@ function mapStateToProps(decks) {
   const decksArray = [];
   const keys = Object.keys(decks);
   keys.forEach(key => {
-      const newObj = {};
-      newObj["id"] = key;
-      const deck = decks[key];
+    const newObj = {};
+    newObj["id"] = key;
+    const deck = decks[key];
     const newDeck = Object.assign(deck, newObj);
     decksArray.push(newDeck);
   });

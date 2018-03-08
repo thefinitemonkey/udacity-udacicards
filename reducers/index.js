@@ -35,7 +35,7 @@ const decks = (state = {}, action) => {
       if (!deck) return state;
       // Update the state by replacing a deck with the
       // returned deck
-      newState = Object.assign(state, deck);
+      newState = Object.assign({}, state, deck);
       return newState;
     case RECEIVE_DELETE_DECK:
       if (!deck) return state;
