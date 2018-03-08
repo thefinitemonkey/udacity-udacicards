@@ -15,7 +15,7 @@ import {
   deleteDeck,
   removeAll
 } from "../actions";
-import { green, white } from "../utils/colors";
+import { green, white, gray } from "../utils/colors";
 import NewDeck from "./NewDeck";
 
 class DeckList extends Component {
@@ -31,6 +31,34 @@ class DeckList extends Component {
 
   handleNavigateCreateDeck = () => {
     this.props.navigation.navigate("NewDeck");
+  };
+
+  handleNavigateToDeck = id => {};
+
+  renderListItem = ({ item }) => {
+    const date = new Date(item.modified);
+    const updateDate = date.toLocaleString();
+
+    return (
+      <View>
+        <TouchableOpacity
+          style={styles.btnListItem}
+          onPress={this.handleNavigateToDeck(item.id)}
+        >
+          <View>
+            <Text style={styles.titleListItem}>{item.title}</Text>
+          </View>
+          <View style={[styles.row, styles.listItemInfo]}>
+            <View>
+              <Text>{item.questions.length} questions</Text>
+            </View>
+            <View>
+              <Text>Updated {updateDate}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   render = () => {
@@ -55,8 +83,8 @@ class DeckList extends Component {
           <FlatList
             style={styles.deckList}
             data={decks}
-            keyExtractor={(item, index) => item.id}
-            renderItem={({ item }) => <Text>{item.title}</Text>}
+            keyExtractor={(deck, index) => deck.id}
+            renderItem={this.renderListItem}
           />
         </View>
       </View>
@@ -77,7 +105,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 20,
-    marginBottom: 20
+    borderBottomColor: gray,
+    borderBottomWidth: 1,
+    paddingBottom: 20
+  },
+  listItemInfo: {
+    justifyContent: "space-between",
+    alignItems: "center"
   },
   twoColumn: {
     margin: 10
@@ -87,7 +121,18 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10
   },
-  deckList: {},
+  deckList: {
+    marginLeft: 10,
+    marginRight: 10,
+    flex: 1
+  },
+  titleListItem: {
+    fontSize: 28
+  },
+  btnListItem: {
+    paddingTop: 15,
+    paddingBottom: 15
+  },
   iosBtn: {
     backgroundColor: green,
     padding: 10,
@@ -129,6 +174,16 @@ function mapStateToProps(decks) {
     const newDeck = Object.assign(deck, newObj);
     decksArray.push(newDeck);
   });
+
+  // Sort the array by title
+  decksArray.sort((a, b) => {
+    const aStr = a.title.toUpperCase();
+    const bStr = b.title.toUpperCase();
+    if (aStr < bStr) return -1;
+    if (aStr > bStr) return 1;
+    return 0;
+  });
+
   return { decks: decksArray };
 }
 
