@@ -35,19 +35,16 @@ const decks = (state = {}, action) => {
       if (!deck) return state;
       // Update the state by replacing a deck with the
       // returned deck
-      newDeck = {};
-      newDeck[deckId] = deck;
-      newState = Object.assign(this.state, newDeck);
-      newState[deckId] = deck;
+      newState = Object.assign(state, deck);
       return newState;
     case RECEIVE_DELETE_DECK:
       if (!deck) return state;
       // Update the state by deleting the specified deck
       newState = {};
-      keys = this.state.keys();
+      keys = state.keys();
       keys.array.forEach(key => {
         if (key !== deckId) {
-          newState[key] = this.state[key];
+          newState[key] = state[key];
         }
       });
       return newState;

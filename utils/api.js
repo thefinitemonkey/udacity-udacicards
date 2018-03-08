@@ -7,16 +7,14 @@ export const getDecks = () => {
   // the decks for all the keys
   const op = AsyncStorage.getAllKeys()
     .then(keys => {
-      console.log("get all keys", keys);
       return AsyncStorage.multiGet(keys);
     })
     .then(deckArray => {
-      console.log("deckArray", deckArray);
       const decks = {};
       deckArray.forEach(deck => {
+        const jsonDeck = JSON.parse(deck[1]);
         decks[deck[0]] = JSON.parse(deck[1])
       }, decks);
-      console.log("parsed decks", decks);
       return decks;
     })
     .catch(e => {
@@ -29,7 +27,6 @@ export const getDecks = () => {
 export const getDeck = key => {
   // Return the specified deck
   const op = AsyncStorage.getItem(key).then((error, results) => {
-    console.log("getdeck results", results);
     return results.json();
   });
 
@@ -40,11 +37,10 @@ export const createDeck = title => {
   // Create a new deck with the given title and a unique key
   const key = `${UDACI_CARDS_APPLICATION_KEY}:${getUUID()}`;
   const newDate = Date.now();
-  console.log("create new deck (key): ", key);
-  console.log("create new deck (title): ", title);
+  const newObj = {title: title, questions:[], created: newDate, modified: newDate}
   const op = AsyncStorage.setItem(
     key,
-    `{title:${title}, questions:[], created:${newDate}, modified:${newDate}}`
+    JSON.stringify(newObj)
   )
     .then(() => {
       const newDeck = {};
@@ -173,7 +169,7 @@ export const removeAll = () => {
     .then(result => {console.log("All removed")
     })
     .catch(e => {
-      console.log("Not all removed");
+      console.warn("Not all removed");
     });
 
   return op;

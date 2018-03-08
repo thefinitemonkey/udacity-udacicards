@@ -14,7 +14,13 @@ import NewDeck from "./NewDeck";
 class DeckList extends Component {
   componentDidMount = () => {
     this.props.getDecks();
+    //this.props.removeAll();
   };
+
+  componentWillReceiveProps = (props) => {
+      console.log("decklist new props", props);
+      this.props = props;
+  }
 
   handleNavigateCreateDeck = () => {
     this.props.navigation.navigate("NewDeck");
@@ -26,7 +32,7 @@ class DeckList extends Component {
     return (
       <View style={styles.row}>
         <View style={styles.column}>
-          <Text style={styles.cardCountText}>{decks.length} card decks</Text>
+          <Text style={styles.cardCountText}>{this.props.decks.length} card decks</Text>
           <TouchableOpacity
             style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
             onPress={this.handleNavigateCreateDeck}
@@ -83,24 +89,18 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(decks) {
-  console.log("mapStateToProps state", decks);
   // Change the format from {"deckid":{...props}} to
   // [{"id":"deckid", ...props}]
 
   const decksArray = [];
   const keys = Object.keys(decks);
-  console.log("mapState keys", keys);
   keys.forEach(key => {
-      console.log("object at key", decks[key]);
       const newObj = {};
       newObj["id"] = key;
-      //console.log("key props", Object.assign(decks[key], newObj));
       const deck = decks[key];
     const newDeck = Object.assign(deck, newObj);
     decksArray.push(newDeck);
   });
-  console.log("decks", decks);
-  console.log("decksArray", decksArray);
   return { decks: decksArray };
 }
 
