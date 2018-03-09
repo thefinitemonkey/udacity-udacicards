@@ -18,8 +18,8 @@ class DeckInfo extends Component {
     super(props);
     this.props = props;
 
-    const { params } = this.props.navigation.state;
-    const id = params ? params.id : null;
+    const screenProps = this.props.screenProps;
+    const id = screenProps ? screenProps.id : null;
     let deck = {};
     if (id) {
       deck = this.props.decks[id];
@@ -60,9 +60,7 @@ class DeckInfo extends Component {
             <Text style={styles.deckInfoHeader}>Stats</Text>
           </View>
           <View>
-            <Text style={styles.deckInfoItem}>
-              {deckSize} cards in deck
-            </Text>
+            <Text style={styles.deckInfoItem}>{deckSize} cards in deck</Text>
           </View>
           <View>
             <Text style={styles.deckInfoItem}>
@@ -75,10 +73,17 @@ class DeckInfo extends Component {
             </Text>
           </View>
         </View>
-        <View style={[styles.row, styles.btnStack]}>
+        <View
+          style={[
+            styles.row,
+            Platform.OS === "ios" ? styles.btnStackIOS : styles.btnStackAndroid
+          ]}
+        >
           <View>
             <TouchableOpacity
-              style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
+              style={[
+                Platform.OS === "ios" ? styles.iosBtnLeft : styles.androidBtn
+              ]}
               onPress={this.handleStartReview}
             >
               <Text style={styles.btnText}>Start Review</Text>
@@ -86,7 +91,9 @@ class DeckInfo extends Component {
           </View>
           <View>
             <TouchableOpacity
-              style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
+              style={[
+                Platform.OS === "ios" ? styles.iosBtnRight : styles.androidBtn
+              ]}
               onPress={this.handleDeleteDeck}
             >
               <Text style={styles.btnText}>Delete Deck</Text>
@@ -118,15 +125,26 @@ const styles = StyleSheet.create({
   deckInfoItem: {
     fontSize: 18
   },
-  btnStack: {
+  btnStackIOS: {
     justifyContent: "center"
   },
-  iosBtn: {
+  btnStackAndroid: {
+    justifyContent: "flex-end"
+  },
+  iosBtnLeft: {
     backgroundColor: green,
     padding: 10,
     borderRadius: 7,
     height: 45,
     marginLeft: 20,
+    marginRight: 10
+  },
+  iosBtnRight: {
+    backgroundColor: green,
+    padding: 10,
+    borderRadius: 7,
+    height: 45,
+    marginLeft: 10,
     marginRight: 20
   },
   androidBtn: {

@@ -97,29 +97,29 @@ export const deleteDeck = deckId => {
   return op;
 };
 
-export const createCard = (key, card) => {
+export const createCard = (deckId, card) => {
   // Create a new card in the specified deck, save the change to
   // the AsyncStorage, then get the deck again to be returned
-  const op = getDeck(key)
+  const op = getDeck(deckId)
     .then(results => results.json())
     .then(obj => {
       card.id = getUUID();
       obj.modified = Date.now();
       obj.questions.push(card);
-      return AsyncStorage.setItem(key, JSON.stringify(obj));
+      return AsyncStorage.setItem(deckId, JSON.stringify(obj));
     })
     .catch(error => {
       if (error) console.warn("error adding card to deck: ", error);
       return null;
     })
-    .then(() => getDeck(key).then(results => results.json()));
+    .then(() => getDeck(deckId).then(results => results.json()));
 
   return op;
 };
 
 export const editCard = (deckId, card) => {
   // Edit the specified card in the specified deck
-  const op = getDeck(key)
+  const op = getDeck(deckId)
     .then(results => results.json())
     .then(obj => {
       // Find the index for the edited card in the
@@ -128,20 +128,20 @@ export const editCard = (deckId, card) => {
       obj.questions.splice(pos, 1, card);
 
       obj.modified = Date.now();
-      return AsyncStorage.setItem(key, JSON.stringify(obj));
+      return AsyncStorage.setItem(deckId, JSON.stringify(obj));
     })
     .catch(error => {
       if (error) console.warn("error editing card in deck: ", error);
       return null;
     })
-    .then(() => getDeck(key).then(results => results.json()));
+    .then(() => getDeck(deckId).then(results => results.json()));
 
   return op;
 };
 
 export const deleteCard = (deckId, card) => {
   // Delete the specified card in the specified deck
-  const op = getDeck(key)
+  const op = getDeck(deckId)
     .then(results => results.json())
     .then(obj => {
       // Find the index for the card to delete in the
@@ -150,13 +150,13 @@ export const deleteCard = (deckId, card) => {
       obj.questions.splice(pos, 1);
 
       obj.modified = Date.now();
-      return AsyncStorage.setItem(key, JSON.stringify(obj));
+      return AsyncStorage.setItem(deckId, JSON.stringify(obj));
     })
     .catch(error => {
       if (error) console.warn("error deleting card in deck: ", error);
       return null;
     })
-    .then(() => getDeck(key).then(results => results.json()));
+    .then(() => getDeck(deckId).then(results => results.json()));
 
   return op;
 };

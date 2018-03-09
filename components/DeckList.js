@@ -26,7 +26,6 @@ class DeckList extends Component {
   };
 
   componentWillReceiveProps = props => {
-    console.log("decklist new props", props);
     this.props = props;
   };
 
