@@ -8,21 +8,58 @@ import {
   Platform
 } from "react-native";
 import { connect } from "react-redux";
-import { createDeck } from "../actions";
+import { createCard, editCard } from "../actions";
 import { green, white, gray } from "../utils/colors";
 import { NavigationActions } from "react-navigation";
 
-class NewDeck extends Component {
+class EditCard extends Component {
   state = {
-    title: ""
+    question: "",
+    answer: "",
+    deckId,
+    questionId
   };
 
-  handleCreateDeck = () => {
-    this.props.createDeck(this.state.title);
-    this.toHome();
+  componentDidMount = () => {
+    const { params } = this.props.navigation.state;
+    // Get the question id. If there is none, then this is
+    // the edit for a new card, so display that title.
+    const qId = params ? params.questionId : null;
+    const dId = params ? params.deckId : null;
+    let title = "New Card";
+    let question;
+    let answer;
+
+    // Use the id to get the question text and display that
+    // as the title
+    if (qId && dId) {
+      const questions = this.props.decks[dId].questions;
+      const questionItem = questions[questions.indexOf(q => q.id === qId)];
+      question = questionItem.question;
+      answer = questionItem.answer;
+
+      title = questionItem.question;
+    }
+
+    this.setState({ question, answer, deckId: dId, questionId: qId });
+    this.props.navigation.state.setParams({ ...params, title });
   };
 
-  toHome = () => {
+  handleCreateCard = () => {
+    const card = { question: this.state.question, answer: this.state.answer };
+
+    this.props.createCard(this.state.deckId, card);
+    this.goBack();
+  };
+
+  handleEditCard = () => {
+    const card = { question: this.state.question, answer: this.state.answer };
+
+    this.props.editCard(this.state.deckId, card);
+    this.goBack();
+  };
+
+  goBack = () => {
     this.props.navigation.goBack();
   };
 
@@ -104,4 +141,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(NewDeck);
+export default connect(null, mapDispatchToProps)(EditCard);
