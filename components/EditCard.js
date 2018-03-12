@@ -16,8 +16,8 @@ class EditCard extends Component {
   state = {
     question: "",
     answer: "",
-    deckId,
-    questionId
+    deckId: null,
+    questionId: null
   };
 
   componentDidMount = () => {
@@ -42,10 +42,12 @@ class EditCard extends Component {
     }
 
     this.setState({ question, answer, deckId: dId, questionId: qId });
-    this.props.navigation.state.setParams({ ...params, title });
+    this.props.navigation.setParams({ ...params, title });
   };
 
   handleCreateCard = () => {
+    console.log("card props", this.props);
+
     const card = { question: this.state.question, answer: this.state.answer };
 
     this.props.createCard(this.state.deckId, card);
@@ -53,7 +55,11 @@ class EditCard extends Component {
   };
 
   handleEditCard = () => {
-    const card = { question: this.state.question, answer: this.state.answer };
+    const card = {
+      id: this.state.questionId,
+      question: this.state.question,
+      answer: this.state.answer
+    };
 
     this.props.editCard(this.state.deckId, card);
     this.goBack();
@@ -67,17 +73,28 @@ class EditCard extends Component {
     return (
       <View style={{ flex: 1 }}>
         <TextInput
-          placeholder={"Deck name"}
+          placeholder={"Question"}
           editable={true}
           keyboardType="default"
           style={styles.titleInput}
           underlineColorAndroid={"transparent"}
-          onChangeText={title => this.setState({ title })}
-          value={this.state.title}
+          onChangeText={question => this.setState({ question })}
+          value={this.state.question}
+        />
+        <TextInput
+          placeholder={"Answer"}
+          editable={true}
+          keyboardType="default"
+          style={styles.titleInput}
+          underlineColorAndroid={"transparent"}
+          onChangeText={answer => this.setState({ answer })}
+          value={this.state.answer}
         />
         <TouchableOpacity
           style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
-          onPress={this.handleCreateDeck}
+          onPress={
+            this.state.questionId ? this.handleEditCard : this.handleCreateCard
+          }
         >
           <Text style={styles.btnText}>Save</Text>
         </TouchableOpacity>
@@ -137,7 +154,8 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    createDeck: title => dispatch(createDeck(title))
+    createCard: (deckId, card) => dispatch(createCard(deckId, card)),
+    editCard: (deckId, card) => dispatch(editCard(deckId, card))
   };
 }
 

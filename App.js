@@ -11,6 +11,7 @@ import DeckList from "./components/DeckList";
 import NewDeck from "./components/NewDeck";
 import DeckInfo from "./components/DeckInfo";
 import Deck from "./components/Deck";
+import EditCard from "./components/EditCard";
 
 const MainNavigator = StackNavigator({
   Home: {
@@ -27,17 +28,35 @@ const MainNavigator = StackNavigator({
       }
     }
   },
-  DeckInfo: {
-    screen: DeckInfo,
+  Deck: {
+    screen: Deck,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
         backgroundColor: green
       }
+    },  
+    DeckInfo: {
+      screen: DeckInfo,
+      navigationOptions: {
+        headerTintColor: white,
+        headerStyle: {
+          backgroundColor: green
+        }
+      },
+    },
+    DeckQuestions: {
+      screen: DeckInfo,
+      navigationOptions: {
+        headerTintColor: white,
+        headerStyle: {
+          backgroundColor: green
+        }
+      }
     }
   },
-  Deck: {
-    screen: Deck,
+  EditCard: {
+    screen: EditCard,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
@@ -58,4 +77,3 @@ export default class App extends Component {
     );
   }
 }
-

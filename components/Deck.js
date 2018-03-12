@@ -9,6 +9,7 @@ import { gray, white, green } from "../utils/colors";
 import { Ionicons } from "@expo/vector-icons";
 import DeckInfo from "./DeckInfo";
 import DeckQuestions from "./DeckQuestions";
+import EditCard from "./EditCard";
 
 class Deck extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -23,7 +24,7 @@ class Deck extends Component {
         DeckInfo: {
           screen: DeckInfo,
           navigationOptions: {
-            tabBarLabel: "Info",
+            tabBarLabel: "Stats",
             tabBarIcon: ({ tintColor }) => (
               <Ionicons name="ios-grid-outline" size={30} color={tintColor} />
             )
@@ -36,6 +37,15 @@ class Deck extends Component {
             tabBarIcon: ({ tintColor }) => (
               <Ionicons name="ios-list" size={30} color={tintColor} />
             )
+          },
+          EditCard: {
+            screen: EditCard,
+            navigationOptions: {
+              headerTintColor: white,
+              headerStyle: {
+                backgroundColor: green
+              }
+            }
           }
         }
       },
@@ -65,7 +75,7 @@ class Deck extends Component {
     const title = params ? params.title : null;
     const TabNav = this.TabNav;
 
-    return <TabNav screenProps={{id, title}} />;
+    return <TabNav screenProps={{id, title, rootNavigation: this.props.navigation}} />;
   };
 }
 

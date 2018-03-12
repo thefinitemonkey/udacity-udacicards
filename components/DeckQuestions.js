@@ -10,6 +10,7 @@ import {
 import { connect } from "react-redux";
 import { createCard, editCard, deleteCard } from "../actions";
 import { green, white, gray } from "../utils/colors";
+import EditCard from "./EditCard";
 
 class DeckQuestions extends Component {
   state = { deck: { questions: [] } };
@@ -24,11 +25,13 @@ class DeckQuestions extends Component {
   };
 
   handleNavigateCreateCard = deckId => {
-    this.props.navigation.navigate("EditCard", { deckId, question: null });
+    console.log("create card click", this.props);
+    this.props.screenProps.rootNavigation.navigate("EditCard", { deckId, question: null });
   };
 
   handleNavigateToCard = (deckId, questionId) => {
-    this.props.navigation.navigate("EditCard", {
+    console.log("edit card click", deckId);
+    this.props.screenProps.rootNavigation.navigate("EditCard", {
       deckId,
       questionId
     });
