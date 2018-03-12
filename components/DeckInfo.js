@@ -23,7 +23,7 @@ class DeckInfo extends Component {
     let deck = {};
     if (id) {
       deck = this.props.decks[id];
-      this.props.navigation.setParams({ title: deck.title });
+      this.props.navigation.setParams({ title: deck.title, deck });
     }
 
     this.state = {
@@ -43,7 +43,11 @@ class DeckInfo extends Component {
     this.props.navigation.goBack();
   };
 
-  handleStartReview = () => {};
+  handleStartReview = () => {
+    this.props.screenProps.rootNavigation.navigate("Review", {
+      deck: this.state.deck
+    });
+  };
 
   render = () => {
     const { id, deck } = this.state;

@@ -42,7 +42,7 @@ class NewDeck extends Component {
           style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
           onPress={this.handleCreateDeck}
         >
-          <Text style={styles.btnText}>Save</Text>
+          <Text style={styles.btnText}>Create Deck</Text>
         </TouchableOpacity>
       </View>
     );

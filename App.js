@@ -12,6 +12,7 @@ import NewDeck from "./components/NewDeck";
 import DeckInfo from "./components/DeckInfo";
 import Deck from "./components/Deck";
 import EditCard from "./components/EditCard";
+import Review from "./components/Review";
 
 const MainNavigator = StackNavigator({
   Home: {
@@ -57,6 +58,15 @@ const MainNavigator = StackNavigator({
   },
   EditCard: {
     screen: EditCard,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: green
+      }
+    }
+  },
+  Review: {
+    screen: Review,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
