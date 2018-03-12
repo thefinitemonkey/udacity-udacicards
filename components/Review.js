@@ -53,6 +53,7 @@ class Review extends Component {
   };
 
   handleReset = () => {
+      console.log("handle reset click");
     this.setState({
       correct: 0,
       current: 0,
@@ -151,14 +152,15 @@ class Review extends Component {
           { justifyContent: "center" }
         ]}
       >
-        <View style={{ alignItems: "center", marginBottom: 20, flex: 1 }}>
+        <View style={{ flex: 1 }} />
+        <View style={{ alignItems: "center", marginBottom: 20 }}>
           <Text style={styles.percentage}>{`${percentage}%`}</Text>
           <Text
             style={styles.score}
           >{`You got ${correct} out of ${total} right`}</Text>
         </View>
-        <View style={{ alignContent: "center", flex: 1}}>
-          <View style={[btnStyle, styles.row, {flex:1}]}>
+        <View style={{ alignContent: "center" }}>
+          <View style={[styles.row, btnStyle]}>
             <TouchableOpacity
               onPress={() => this.handleReset()}
               style={[
@@ -179,6 +181,7 @@ class Review extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        <View style={{ flex: 2 }} />
       </View>
     );
   };
@@ -212,8 +215,7 @@ const styles = StyleSheet.create({
     marginRight: 15
   },
   row: {
-    flexDirection: "row",
-    flex: 1
+    flexDirection: "row"
   },
   column: {
     flexDirection: "column",
@@ -230,12 +232,10 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   btnStackIOS: {
-    justifyContent: "center",
-    alignContent: "flex-end"
+    justifyContent: "center"
   },
   btnStackAndroid: {
-    justifyContent: "flex-end",
-    alignContent: "flex-end"
+    justifyContent: "flex-end"
   },
   iosBtnLeft: {
     marginLeft: 20,
