@@ -32,6 +32,22 @@ class DeckInfo extends Component {
     };
   }
 
+  componentWillReceiveProps = (props) => {
+    this.props = props;
+
+    const screenProps = this.props.screenProps;
+    const id = screenProps ? screenProps.id : null;
+    let deck = {};
+    if (id) {
+      deck = this.props.decks[id];
+    }
+
+    this.setState({
+      id,
+      deck
+    });
+  }
+
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state;
     const title = params ? params.title : "Info Screen";
