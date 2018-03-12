@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { createCard, editCard, deleteCard } from "../actions";
-import { green, white, gray } from "../utils/colors";
+import { green, white, gray, blue } from "../utils/colors";
 import EditCard from "./EditCard";
 
 class DeckQuestions extends Component {
@@ -17,55 +17,84 @@ class DeckQuestions extends Component {
 
   componentDidMount = () => {
     // Set the state to reflect the selected deck
-    this.setState({ deck: this.props.decks[this.props.screenProps.id] });
+    this.setState({
+      deck: this.props.decks[this.props.screenProps.id],
+      questions: this.props.decks[this.props.screenProps.id].questions || []
+    });
   };
 
   componentWillReceiveProps = props => {
     this.props = props;
+    this.setState({
+      deck: this.props.decks[this.props.screenProps.id],
+      questions: this.props.decks[this.props.screenProps.id].questions || []
+    });
   };
 
   handleNavigateCreateCard = deckId => {
-    console.log("create card click", this.props);
-    this.props.screenProps.rootNavigation.navigate("EditCard", { deckId, question: null });
+    this.props.screenProps.rootNavigation.navigate("EditCard", {
+      deckId,
+      questionId: null
+    });
   };
 
   handleNavigateToCard = (deckId, questionId) => {
-    console.log("edit card click", deckId);
     this.props.screenProps.rootNavigation.navigate("EditCard", {
       deckId,
       questionId
     });
   };
 
+  handleDeleteCard = (deckId, questionId) => {
+      console.log("delete deckId", deckId);
+      console.log("delete questionId", questionId);
+      this.props.deleteCard(deckId, questionId);
+  }
+
   renderListItem = ({ item }) => {
-    const date = new Date(item.modified);
+    const date = item.modified ? new Date(item.modified) : "unknown";
     const updateDate = date.toLocaleString();
     const questionId = item.id;
     const question = item.question;
     const answer = item.answer;
 
     return (
-      <View>
-        <TouchableOpacity
-          style={styles.btnListItem}
-          onPress={() =>
-            this.handleNavigateToCard(this.state.deck.id, questionId)
-          }
-        >
+      <View style={styles.questionListItem}>
+        <View style={styles.questionSegment}>
+          <Text style={{ fontWeight: "bold" }}>Question: </Text>
+          <Text style={styles.questionListContent}>{item.question}</Text>
+        </View>
+        <View style={styles.questionSegment}>
+          <Text style={{ fontWeight: "bold" }}>Answer: </Text>
+          <Text style={styles.questionListContent}>{item.answer}</Text>
+        </View>
+        <View style={[styles.row, styles.listItemInfo]}>
           <View>
-            <Text style={{ fontWeight: "bold" }}>Question: </Text>
-            <Text style={styles.titleListItem}>{item.question}</Text>
+            <Text>Updated {updateDate}</Text>
           </View>
-          <View>
-            <Text style={{ fontWeight: "bold" }}>Answer: </Text>
-            <Text style={styles.titleListItem}>{item.answer}</Text>
-          </View>
-          <View style={[styles.row, styles.listItemInfo]}>
+          <View style={styles.row}>
             <View>
-              <Text>Updated {updateDate}</Text>
+              <TouchableOpacity
+                style={[styles.btnLeft]}
+                onPress={() =>
+                  this.handleDeleteCard(this.state.deck.id, questionId)
+                }
+              >
+                <Text style={styles.commandLink}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={[styles.btnRight]}
+                onPress={() =>
+                  this.handleNavigateToCard(this.state.deck.id, questionId)
+                }
+              >
+                <Text style={styles.commandLink}>Edit</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -74,20 +103,20 @@ class DeckQuestions extends Component {
     const { decks } = this.props;
     const deck = this.state.deck;
     const deckId = deck.id;
-    const questions = deck.questions;
+    const questions = this.state.questions;
 
     return (
       <View style={styles.column}>
         <View style={[styles.row, styles.listHeader]}>
           <View>
             <Text style={styles.cardCountText}>
-              {questions.length} cards in deck
+              {questions && questions.length} cards in deck
             </Text>
           </View>
           <View>
             <TouchableOpacity
               style={Platform.OS === "ios" ? styles.iosBtn : styles.androidBtn}
-              onPress={deckId => this.handleNavigateCreateCard(deckId)}
+              onPress={() => this.handleNavigateCreateCard(deckId)}
             >
               <Text style={styles.btnText}>New Card</Text>
             </TouchableOpacity>
@@ -140,10 +169,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
     flex: 1
   },
-  titleListItem: {
-    fontSize: 28
+  questionListContent: {
+    fontSize: 20
   },
-  btnListItem: {
+  questionSegment: {
+    marginBottom: 7
+  },
+  questionListItem: {
     paddingTop: 15,
     paddingBottom: 15
   },
@@ -172,6 +204,15 @@ const styles = StyleSheet.create({
     color: white,
     fontSize: 18,
     textAlign: "center"
+  },
+  btnLeft: {
+      marginRight: 15
+  },
+  btnRight: {
+      marginLeft: 15
+  },
+  commandLink: {
+    color: blue
   }
 });
 
@@ -181,11 +222,7 @@ function mapStateToProps(decks) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getDecks: () => dispatch(getDecks()),
-    getDeck: deckId => dispatch(getDeck(deckId)),
-    createDeck: title => dispatch(createDeck(title)),
-    deleteDeck: deckId => dispatch(deleteDeck(deckId)),
-    removeAll: () => dispatch(removeAll())
+    deleteCard: (deckId, questionId) => dispatch(deleteCard(deckId, questionId))
   };
 }
 

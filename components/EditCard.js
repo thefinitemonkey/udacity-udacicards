@@ -33,8 +33,12 @@ class EditCard extends Component {
     // Use the id to get the question text and display that
     // as the title
     if (qId && dId) {
+      console.log("props", this.props);
+      console.log("qId", qId);
       const questions = this.props.decks[dId].questions;
-      const questionItem = questions[questions.indexOf(q => q.id === qId)];
+      console.log("questions", questions);
+      const questionItem = questions[questions.findIndex(q => q.id === qId)];
+      console.log("questionItem", questionItem);
       question = questionItem.question;
       answer = questionItem.answer;
 
@@ -46,8 +50,6 @@ class EditCard extends Component {
   };
 
   handleCreateCard = () => {
-    console.log("card props", this.props);
-
     const card = { question: this.state.question, answer: this.state.answer };
 
     this.props.createCard(this.state.deckId, card);
@@ -152,6 +154,10 @@ const styles = StyleSheet.create({
   }
 });
 
+function mapStateToProps(decks) {
+  return { decks };
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     createCard: (deckId, card) => dispatch(createCard(deckId, card)),
@@ -159,4 +165,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(EditCard);
+export default connect(mapStateToProps, mapDispatchToProps)(EditCard);

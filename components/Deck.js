@@ -9,7 +9,6 @@ import { gray, white, green } from "../utils/colors";
 import { Ionicons } from "@expo/vector-icons";
 import DeckInfo from "./DeckInfo";
 import DeckQuestions from "./DeckQuestions";
-import EditCard from "./EditCard";
 
 class Deck extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -38,15 +37,6 @@ class Deck extends Component {
               <Ionicons name="ios-list" size={30} color={tintColor} />
             )
           },
-          EditCard: {
-            screen: EditCard,
-            navigationOptions: {
-              headerTintColor: white,
-              headerStyle: {
-                backgroundColor: green
-              }
-            }
-          }
         }
       },
       {

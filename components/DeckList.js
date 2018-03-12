@@ -54,7 +54,7 @@ class DeckList extends Component {
           </View>
           <View style={[styles.row, styles.listItemInfo]}>
             <View>
-              <Text>{item.questions.length} questions</Text>
+              <Text>{item.questions && item.questions.length} cards</Text>
             </View>
             <View>
               <Text>Updated {updateDate}</Text>
@@ -72,7 +72,7 @@ class DeckList extends Component {
       <View style={styles.column}>
         <View style={[styles.row, styles.listHeader]}>
           <View>
-            <Text style={styles.cardCountText}>{decks.length} card decks</Text>
+            <Text style={styles.cardCountText}>{decks && decks.length} card decks</Text>
           </View>
           <View>
             <TouchableOpacity

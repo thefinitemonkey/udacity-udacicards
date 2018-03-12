@@ -13,7 +13,7 @@ export const getDecks = () => {
       const decks = {};
       deckArray.forEach(deck => {
         const jsonDeck = JSON.parse(deck[1]);
-        decks[deck[0]] = JSON.parse(deck[1])
+        decks[deck[0]] = JSON.parse(deck[1]);
       }, decks);
       return decks;
     })
@@ -37,11 +37,13 @@ export const createDeck = title => {
   // Create a new deck with the given title and a unique key
   const key = `${UDACI_CARDS_APPLICATION_KEY}:${getUUID()}`;
   const newDate = Date.now();
-  const newObj = {title: title, questions:[], created: newDate, modified: newDate}
-  const op = AsyncStorage.setItem(
-    key,
-    JSON.stringify(newObj)
-  )
+  const newObj = {
+    title: title,
+    questions: [],
+    created: newDate,
+    modified: newDate
+  };
+  const op = AsyncStorage.setItem(key, JSON.stringify(newObj))
     .then(() => {
       const newDeck = {};
       newDeck[key] = {
@@ -64,13 +66,13 @@ export const editDeck = (deckId, title) => {
   // Edit an existing deck with the given title
   const newDate = Date.now();
   let returnObj;
-  const op = AsynStorage.getItem(deckId)
+  const op = AsyncStorage.getItem(deckId)
     .then(results => results.json())
     .then(obj => {
       obj.title = title;
       obj.modified = newDate;
       returnObj = obj;
-      AsynStorage.setItem(deckId, JSON.stringify(obj));
+      AsyncStorage.setItem(deckId, JSON.stringify(obj));
     })
     .then(() => {
       return returnObj;
@@ -100,63 +102,88 @@ export const deleteDeck = deckId => {
 export const createCard = (deckId, card) => {
   // Create a new card in the specified deck, save the change to
   // the AsyncStorage, then get the deck again to be returned
-  const op = getDeck(deckId)
-    .then(results => results.json())
-    .then(obj => {
+  const op = AsyncStorage.getItem(deckId)
+    .then(response => {
+      const obj = JSON.parse(response);
+
       card.id = getUUID();
-      obj.modified = Date.now();
+      card.modified = Date.now();
+      obj.modified = card.modified;
       obj.questions.push(card);
+
       return AsyncStorage.setItem(deckId, JSON.stringify(obj));
     })
     .catch(error => {
       if (error) console.warn("error adding card to deck: ", error);
       return null;
     })
-    .then(() => getDeck(deckId).then(results => results.json()));
+    .then(() =>
+      AsyncStorage.getItem(deckId).then(response => {
+        const obj = JSON.parse(response);
+        const returnObj = {};
+        returnObj[deckId] = obj;
+        return returnObj;
+      })
+    );
 
   return op;
 };
 
 export const editCard = (deckId, card) => {
   // Edit the specified card in the specified deck
-  const op = getDeck(deckId)
-    .then(results => results.json())
-    .then(obj => {
+  const op = AsyncStorage.getItem(deckId)
+    .then(response => {
+      obj = JSON.parse(response);
+
       // Find the index for the edited card in the
       // array of questions and splice the update in
       const pos = obj.questions.findIndex(e => e.id === card.id);
+      card.modified = Date.now();
+      obj.modified = card.modified;
       obj.questions.splice(pos, 1, card);
 
-      obj.modified = Date.now();
       return AsyncStorage.setItem(deckId, JSON.stringify(obj));
     })
     .catch(error => {
       if (error) console.warn("error editing card in deck: ", error);
       return null;
     })
-    .then(() => getDeck(deckId).then(results => results.json()));
+    .then(() =>
+      AsyncStorage.getItem(deckId).then(response => {
+        const obj = JSON.parse(response);
+        const returnObj = {};
+        returnObj[deckId] = obj;
+        return returnObj;
+      })
+    );
 
   return op;
 };
 
-export const deleteCard = (deckId, card) => {
+export const deleteCard = (deckId, questionId) => {
   // Delete the specified card in the specified deck
-  const op = getDeck(deckId)
-    .then(results => results.json())
-    .then(obj => {
+  const op = AsyncStorage.getItem(deckId)
+    .then(response => {
+      const obj = JSON.parse(response);
       // Find the index for the card to delete in the
       // array of questions and splice the card out
-      const pos = obj.questions.findIndex(e => e.id === card.id);
+      const pos = obj.questions.findIndex(e => e.id === questionId);
+      obj.modified = Date.now();
       obj.questions.splice(pos, 1);
 
-      obj.modified = Date.now();
       return AsyncStorage.setItem(deckId, JSON.stringify(obj));
     })
     .catch(error => {
       if (error) console.warn("error deleting card in deck: ", error);
       return null;
     })
-    .then(() => getDeck(deckId).then(results => results.json()));
+    .then(() => AsyncStorage.getItem(deckId)
+    .then(response => {
+      const obj = JSON.parse(response);
+      const returnObj = {};
+      returnObj[deckId] = obj;
+      return returnObj;
+    }));
 
   return op;
 };
@@ -166,12 +193,12 @@ export const removeAll = () => {
     .then(keys => {
       return AsyncStorage.multiRemove(keys);
     })
-    .then(result => {console.log("All removed")
+    .then(result => {
+      console.log("All removed");
     })
     .catch(e => {
       console.warn("Not all removed");
     });
 
   return op;
-
-}
+};
