@@ -144,15 +144,21 @@ class Review extends Component {
       Platform.OS === "ios" ? styles.btnStackIOS : styles.btnStackAndroid;
 
     return (
-      <View style={[styles.resultsDisplay]}>
-        <View style={{ flex: 1 }}>
+      <View
+        style={[
+          styles.column,
+          styles.mainContainer,
+          { justifyContent: "center" }
+        ]}
+      >
+        <View style={{ alignItems: "center", marginBottom: 20, flex: 1 }}>
           <Text style={styles.percentage}>{`${percentage}%`}</Text>
           <Text
             style={styles.score}
           >{`You got ${correct} out of ${total} right`}</Text>
         </View>
-        <View style={{flex:1}}>
-          <View style={[styles.row, btnStyle, { flex: 1 }]}>
+        <View style={{ alignContent: "center", flex: 1}}>
+          <View style={[btnStyle, styles.row, {flex:1}]}>
             <TouchableOpacity
               onPress={() => this.handleReset()}
               style={[
