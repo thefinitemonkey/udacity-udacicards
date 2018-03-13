@@ -10,6 +10,7 @@ import {
 import { green, white, gray } from "../utils/colors";
 import { NavigationActions } from "react-navigation";
 import { deleteDeck } from "../actions";
+import { clearLocalNotification, setLocalNotification } from "../utils/helpers";
 
 class DeckInfo extends Component {
   state = { id: null, deck: null };
@@ -32,7 +33,7 @@ class DeckInfo extends Component {
     };
   }
 
-  componentWillReceiveProps = (props) => {
+  componentWillReceiveProps = props => {
     this.props = props;
 
     const screenProps = this.props.screenProps;
@@ -46,7 +47,7 @@ class DeckInfo extends Component {
       id,
       deck
     });
-  }
+  };
 
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state;
@@ -60,6 +61,9 @@ class DeckInfo extends Component {
   };
 
   handleStartReview = () => {
+    // Reset notification before starting review
+    clearLocalNotification().then(setLocalNotification);
+
     this.props.screenProps.rootNavigation.navigate("Review", {
       deck: this.state.deck
     });

@@ -17,6 +17,12 @@ class Review extends Component {
     state: "question"
   };
 
+  static navigationOptions = ({ navigation }) => {
+    const { params } = navigation.state;
+    const title = "Quiz";
+    return { ...params, title };
+  };
+
   componentDidMount = () => {
     // Set the deck and questions into the component state
     const deck =
@@ -53,7 +59,6 @@ class Review extends Component {
   };
 
   handleReset = () => {
-      console.log("handle reset click");
     this.setState({
       correct: 0,
       current: 0,
@@ -66,6 +71,7 @@ class Review extends Component {
   };
 
   renderQuestionSeries = (questions, correct, total, current, state) => {
+    // Determine button stack style based on OS
     const btnStyle =
       Platform.OS === "ios" ? styles.btnStackIOS : styles.btnStackAndroid;
 
@@ -73,8 +79,7 @@ class Review extends Component {
       <View style={[styles.column, styles.mainContainer]}>
         <View style={{ flex: 5 }}>
           <View>
-            <Text style={styles.cardCount}>{`${total -
-              current} cards remaining`}</Text>
+            <Text style={styles.cardCount}>{`Card ${current + 1} of ${total}`}</Text>
           </View>
           <ScrollView style={{ flex: 1 }}>
             {questions && state === "question" ? (
@@ -117,7 +122,7 @@ class Review extends Component {
                     styles.btnWrong
                   ]}
                 >
-                  <Text style={styles.btnText}>Awwwww...</Text>
+                  <Text style={styles.btnText}>Incorrect</Text>
                 </TouchableOpacity>
               </View>
               <View>
@@ -128,7 +133,7 @@ class Review extends Component {
                     Platform.OS === "ios" ? styles.iosBtnLeft : ""
                   ]}
                 >
-                  <Text style={styles.btnText}>Got it Right!</Text>
+                  <Text style={styles.btnText}>Correct</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -141,6 +146,7 @@ class Review extends Component {
   renderResults = (correct, total) => {
     // Calculate the percentage correct and display results
     const percentage = Math.round(correct / total * 100);
+    // Determine button stack style based on OS
     const btnStyle =
       Platform.OS === "ios" ? styles.btnStackIOS : styles.btnStackAndroid;
 
@@ -195,6 +201,8 @@ class Review extends Component {
 
     const { correct, total, current, state } = this.state;
 
+    // If we aren't at the end of the questions then render the question
+    // display, otherwise render the results display
     if (current < total) {
       return this.renderQuestionSeries(
         questions,

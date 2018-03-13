@@ -20,6 +20,12 @@ class EditCard extends Component {
     questionId: null
   };
 
+  static navigationOptions = ({ navigation }) => {
+    const { params } = navigation.state;
+    const title = "Edit Card";
+    return { ...params, title };
+  };
+
   componentDidMount = () => {
     const { params } = this.props.navigation.state;
     // Get the question id. If there is none, then this is
@@ -73,7 +79,7 @@ class EditCard extends Component {
 
   render = () => {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, margin: 15 }}>
         <TextInput
           placeholder={"Question"}
           editable={true}
@@ -150,7 +156,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height: 40,
     borderColor: gray,
-    borderWidth: 1
+    borderWidth: 1,
+    marginBottom: 20
   }
 });
 

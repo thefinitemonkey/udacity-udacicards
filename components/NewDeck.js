@@ -28,7 +28,7 @@ class NewDeck extends Component {
 
   render = () => {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, margin: 15 }}>
         <TextInput
           placeholder={"Deck name"}
           editable={true}
@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height: 40,
     borderColor: gray,
-    borderWidth: 1
+    borderWidth: 1,
+    marginBottom: 20
   }
 });
 

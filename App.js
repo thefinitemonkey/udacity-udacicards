@@ -13,6 +13,7 @@ import DeckInfo from "./components/DeckInfo";
 import Deck from "./components/Deck";
 import EditCard from "./components/EditCard";
 import Review from "./components/Review";
+import { setLocalNotification } from "./utils/helpers";
 
 const MainNavigator = StackNavigator({
   Home: {
@@ -25,7 +26,8 @@ const MainNavigator = StackNavigator({
       title: "New Deck",
       headerTintColor: white,
       headerStyle: {
-        backgroundColor: green
+        backgroundColor: green,
+        height: 40
       }
     }
   },
@@ -34,24 +36,27 @@ const MainNavigator = StackNavigator({
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
-        backgroundColor: green
+        backgroundColor: green,
+        height: 40
       }
-    },  
+    },
     DeckInfo: {
       screen: DeckInfo,
       navigationOptions: {
         headerTintColor: white,
         headerStyle: {
-          backgroundColor: green
+          backgroundColor: green,
+          height: 40
         }
-      },
+      }
     },
     DeckQuestions: {
       screen: DeckInfo,
       navigationOptions: {
         headerTintColor: white,
         headerStyle: {
-          backgroundColor: green
+          backgroundColor: green,
+          height: 40
         }
       }
     }
@@ -61,7 +66,8 @@ const MainNavigator = StackNavigator({
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
-        backgroundColor: green
+        backgroundColor: green,
+        height: 40
       }
     }
   },
@@ -70,12 +76,17 @@ const MainNavigator = StackNavigator({
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
-        backgroundColor: green
+        backgroundColor: green,
+        height: 40
       }
     }
   }
 });
 export default class App extends Component {
+  componentDidMount = () => {
+    setLocalNotification();
+  }
+  
   render() {
     return (
       <Provider store={store()}>
