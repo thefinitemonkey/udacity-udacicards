@@ -50,14 +50,16 @@ class DeckInfo extends Component {
   };
 
   static navigationOptions = ({ navigation }) => {
+    // Set the nav options to display the title
     const { params } = navigation.state;
     const title = params ? params.title : "Info Screen";
     return { ...params, title };
   };
 
   handleDeleteDeck = () => {
+    // Delete the deck and navigate back to the list of decks
     if (this.state.deck) this.props.deleteDeck(this.state.deck.id);
-    this.props.navigation.goBack();
+    this.props.screenProps.rootNavigation.goBack();
   };
 
   handleStartReview = () => {

@@ -1,5 +1,9 @@
 import { AsyncStorage } from "react-native";
-import { UDACI_CARDS_APPLICATION_KEY, getUUID } from "./helpers";
+import {
+  UDACI_CARDS_APPLICATION_KEY,
+  NOTIFICATION_KEY,
+  getUUID
+} from "./helpers";
 
 export const getDecks = () => {
   // Return all of the decks including all of their content
@@ -7,7 +11,13 @@ export const getDecks = () => {
   // the decks for all the keys
   const op = AsyncStorage.getAllKeys()
     .then(keys => {
-      return AsyncStorage.multiGet(keys);
+      // Need to filter out any keys that don't belong to the decks
+      const filteredKeys = keys.filter(
+        key =>
+          key !== NOTIFICATION_KEY &&
+          key.indexOf(UDACI_CARDS_APPLICATION_KEY) === 0
+      );
+      return AsyncStorage.multiGet(filteredKeys);
     })
     .then(deckArray => {
       const decks = {};
@@ -177,13 +187,14 @@ export const deleteCard = (deckId, questionId) => {
       if (error) console.warn("error deleting card in deck: ", error);
       return null;
     })
-    .then(() => AsyncStorage.getItem(deckId)
-    .then(response => {
-      const obj = JSON.parse(response);
-      const returnObj = {};
-      returnObj[deckId] = obj;
-      return returnObj;
-    }));
+    .then(() =>
+      AsyncStorage.getItem(deckId).then(response => {
+        const obj = JSON.parse(response);
+        const returnObj = {};
+        returnObj[deckId] = obj;
+        return returnObj;
+      })
+    );
 
   return op;
 };

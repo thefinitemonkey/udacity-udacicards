@@ -22,6 +22,7 @@ import Deck from "./Deck";
 class DeckList extends Component {
   componentDidMount = () => {
     this.props.getDecks();
+    // This function only used for cleaning out the decks during development
     //this.props.removeAll();
   };
 
@@ -34,7 +35,7 @@ class DeckList extends Component {
   };
 
   handleNavigateToDeck = (deckId, deckTitle) => {
-    this.props.navigation.navigate("Deck", { id:deckId, title:deckTitle });
+    this.props.navigation.navigate("Deck", { id: deckId, title: deckTitle });
   };
 
   renderListItem = ({ item }) => {
@@ -72,7 +73,9 @@ class DeckList extends Component {
       <View style={styles.column}>
         <View style={[styles.row, styles.listHeader]}>
           <View>
-            <Text style={styles.cardCountText}>{decks && decks.length} card decks</Text>
+            <Text style={styles.cardCountText}>
+              {decks && decks.length} card decks
+            </Text>
           </View>
           <View>
             <TouchableOpacity
@@ -179,14 +182,16 @@ function mapStateToProps(decks) {
     decksArray.push(newDeck);
   });
 
-  // Sort the array by title
-  decksArray.sort((a, b) => {
-    const aStr = a.title.toUpperCase();
-    const bStr = b.title.toUpperCase();
-    if (aStr < bStr) return -1;
-    if (aStr > bStr) return 1;
-    return 0;
-  });
+  // Sort the array by title if it has contents
+  if (decksArray.length) {
+    decksArray.sort((a, b) => {
+      const aStr = a.title.toUpperCase();
+      const bStr = b.title.toUpperCase();
+      if (aStr < bStr) return -1;
+      if (aStr > bStr) return 1;
+      return 0;
+    });
+  }
 
   return { decks: decksArray };
 }

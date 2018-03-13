@@ -11,6 +11,7 @@ import DeckInfo from "./DeckInfo";
 import DeckQuestions from "./DeckQuestions";
 
 class Deck extends Component {
+  // Set the screen header options with title
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state;
     const title = params ? params.title : "Info Screen";
@@ -18,6 +19,9 @@ class Deck extends Component {
   };
 
   componentWillMount = () => {
+    // Set up the tab navigator. The Deck class is just a navigation
+    // route that contains the tabs, which contains the related
+    // content for this section.
     this.TabNav = TabNavigator(
       {
         DeckInfo: {

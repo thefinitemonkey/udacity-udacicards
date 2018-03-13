@@ -1,9 +1,9 @@
 export const UDACI_CARDS_APPLICATION_KEY = "FMCards";
+export const NOTIFICATION_KEY = "FMCards:Notifications";
 
 import { Notifications, Permissions } from "expo";
 import { AsyncStorage } from "react-native";
 
-const NOTIFICATION_KEY = "FMCards:Notifications";
 
 export const getUUID = () => {
   const uuidv1 = require("uuid/v1");
