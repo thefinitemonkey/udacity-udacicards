@@ -17,9 +17,25 @@ class NewDeck extends Component {
     title: ""
   };
 
+  componentWillReceiveProps = props => {
+    // Check if there is a new deck, and if so then navigate to
+    // the details screen
+    const keys = Object.keys(props.decks);
+    let id = null;
+    let title = null;
+    keys.forEach(key => {
+      const deck = props.decks[key];
+      if (deck.new) {
+        id = key;
+        title = deck.title;
+      }
+    });
+
+    if (id) this.props.navigation.replace("Deck", { id, title });
+  };
+
   handleCreateDeck = () => {
     this.props.createDeck(this.state.title);
-    this.toHome();
   };
 
   toHome = () => {
@@ -99,10 +115,14 @@ const styles = StyleSheet.create({
   }
 });
 
+function mapStateToProps(decks) {
+  return { decks };
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     createDeck: title => dispatch(createDeck(title))
   };
 }
 
-export default connect(null, mapDispatchToProps)(NewDeck);
+export default connect(mapStateToProps, mapDispatchToProps)(NewDeck);

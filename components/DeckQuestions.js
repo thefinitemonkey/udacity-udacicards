@@ -46,8 +46,6 @@ class DeckQuestions extends Component {
   };
 
   handleDeleteCard = (deckId, questionId) => {
-      console.log("delete deckId", deckId);
-      console.log("delete questionId", questionId);
       this.props.deleteCard(deckId, questionId);
   }
 

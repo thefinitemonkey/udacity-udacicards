@@ -2,6 +2,7 @@ import * as Api from "../utils/api";
 
 export const RECEIVE_GET_DECKS = "RECEIVE_GET_DECKS";
 export const RECEIVE_GET_DECK = "RECEIVE_GET_DECK";
+export const RECEIVE_CREATE_DECK = "RECEIVE_CREATE_DECK";
 export const RECEIVE_DELETE_DECK = "RECEIVE_DELETE_DECK";
 export const RECEIVE_REMOVE_ALL = "RECEIVE_REMOVE_ALL";
 
@@ -19,6 +20,13 @@ export function receiveGetDeck(deck) {
   };
 }
 
+export function receiveCreateDeck(deck) {
+  return {
+    type: RECEIVE_CREATE_DECK,
+    deck
+  };
+}
+
 export function receiveDeleteDeck(deckId) {
   return {
     type: RECEIVE_DELETE_DECK,
@@ -28,7 +36,7 @@ export function receiveDeleteDeck(deckId) {
 
 export const removeAll = () => dispatch => {
   Api.removeAll().then(() => dispatch(receiveRemoveAll()));
-}
+};
 
 export const getDecks = () => dispatch => {
   Api.getDecks().then(decks => dispatch(receiveGetDecks(decks)));
@@ -38,13 +46,15 @@ export const getDeck = deckId => dispatch => {
   Api.getDeck(deckId).then(deck => dispatch(receiveGetDeck(deck)));
 };
 
-export const createDeck = (deckId, title) => dispatch => {
-  Api.createDeck(deckId, title).then(deck => dispatch(receiveGetDeck(deck)));
+export const createDeck = title => dispatch => {
+  Api.createDeck(title).then(deck => {
+    dispatch(receiveCreateDeck(deck));
+  });
 };
 
 export const editDeck = (deckId, title) => dispatch => {
   Api.editDeck(deckId, title).then(deck => dispatch(receiveGetDeck(deck)));
-}
+};
 
 export const deleteDeck = deckId => dispatch => {
   Api.deleteDeck(deckId).then(deckId => dispatch(receiveDeleteDeck(deckId)));
@@ -61,4 +71,3 @@ export const editCard = (deckId, card) => dispatch => {
 export const deleteCard = (deckId, card) => dispatch => {
   Api.deleteCard(deckId, card).then(deck => dispatch(receiveGetDeck(deck)));
 };
-

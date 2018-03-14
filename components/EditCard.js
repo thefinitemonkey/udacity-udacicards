@@ -39,12 +39,8 @@ class EditCard extends Component {
     // Use the id to get the question text and display that
     // as the title
     if (qId && dId) {
-      console.log("props", this.props);
-      console.log("qId", qId);
       const questions = this.props.decks[dId].questions;
-      console.log("questions", questions);
       const questionItem = questions[questions.findIndex(q => q.id === qId)];
-      console.log("questionItem", questionItem);
       question = questionItem.question;
       answer = questionItem.answer;
 
